@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Pre-configured Allergen Types -->
+        
+        <record id="allergen_dairy" model="waiting.list.allergen">
+            <field name="name">Dairy</field>
+            <field name="description">Milk, cheese, yogurt, butter, cream and other dairy products</field>
+            <field name="sequence">10</field>
+            <field name="icon">🥛</field>
+            <field name="color">1</field>
+        </record>
+        
+        <record id="allergen_tree_nuts" model="waiting.list.allergen">
+            <field name="name">Tree Nuts</field>
+            <field name="description">Almonds, walnuts, cashews, pistachios, hazelnuts, and other tree nuts</field>
+            <field name="sequence">20</field>
+            <field name="icon">🌰</field>
+            <field name="color">2</field>
+        </record>
+        
+        <record id="allergen_peanuts" model="waiting.list.allergen">
+            <field name="name">Peanuts</field>
+            <field name="description">Peanuts and peanut products (legume, not tree nut)</field>
+            <field name="sequence">30</field>
+            <field name="icon">🥜</field>
+            <field name="color">3</field>
+        </record>
+        
+        <record id="allergen_shellfish" model="waiting.list.allergen">
+            <field name="name">Shellfish</field>
+            <field name="description">Shrimp, crab, lobster, oysters, mussels, clams, and other shellfish</field>
+            <field name="sequence">40</field>
+            <field name="icon">🦐</field>
+            <field name="color">4</field>
+        </record>
+        
+        <record id="allergen_fish" model="waiting.list.allergen">
+            <field name="name">Fish</field>
+            <field name="description">All types of fish (salmon, tuna, cod, etc.)</field>
+            <field name="sequence">50</field>
+            <field name="icon">🐟</field>
+            <field name="color">5</field>
+        </record>
+        
+        <record id="allergen_gluten" model="waiting.list.allergen">
+            <field name="name">Gluten</field>
+            <field name="description">Wheat, barley, rye, bread, pasta, and gluten-containing grains</field>
+            <field name="sequence">60</field>
+            <field name="icon">🌾</field>
+            <field name="color">6</field>
+        </record>
+        
+        <record id="allergen_eggs" model="waiting.list.allergen">
+            <field name="name">Eggs</field>
+            <field name="description">Eggs and egg-containing products</field>
+            <field name="sequence">70</field>
+            <field name="icon">🥚</field>
+            <field name="color">7</field>
+        </record>
+        
+        <record id="allergen_soy" model="waiting.list.allergen">
+            <field name="name">Soy</field>
+            <field name="description">Soybeans, tofu, soy sauce, and soy-based products</field>
+            <field name="sequence">80</field>
+            <field name="icon">🫘</field>
+            <field name="color">8</field>
+        </record>
+        
+        <record id="allergen_sesame" model="waiting.list.allergen">
+            <field name="name">Sesame</field>
+            <field name="description">Sesame seeds, tahini, and sesame oil</field>
+            <field name="sequence">90</field>
+            <field name="icon">⚪</field>
+            <field name="color">9</field>
+        </record>
+        
+        <record id="allergen_other" model="waiting.list.allergen">
+            <field name="name">Other</field>
+            <field name="description">Other allergens or dietary restrictions not listed above</field>
+            <field name="sequence">100</field>
+            <field name="icon">⚠️</field>
+            <field name="color">10</field>
+        </record>
+        
+    </data>
+</odoo>

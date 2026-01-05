@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting List Enterprise</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #667eea 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(30, 58, 138, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "⭐";
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.1;
+            top: -30px;
+            right: -20px;
+        }
+        
+        .header h1 {
+            font-size: 3.2em;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header .tagline {
+            font-size: 1.5em;
+            opacity: 0.95;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .enterprise-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #1e3a8a;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        }
+        
+        .section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+        
+        h2 {
+            color: #1e3a8a;
+            font-size: 2.2em;
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        h3 {
+            color: #3b82f6;
+            font-size: 1.6em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 5px solid #3b82f6;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .feature-card.enterprise-exclusive {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left-color: #f59e0b;
+        }
+        
+        .feature-card.enterprise-exclusive::after {
+            content: "ENTERPRISE";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f59e0b;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 700;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .feature-card h4 {
+            color: #1e3a8a;
+            margin-top: 0;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .enterprise-feature:before {
+            content: "⭐";
+            color: #f59e0b !important;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: #1e3a8a;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f0f9ff;
+        }
+        
+        .check-icon {
+            color: #10b981;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .star-icon {
+            color: #f59e0b;
+            font-size: 1.5em;
+        }
+        
+        .highlight-box {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+        
+        .alert-box {
+            background: #fee2e2;
+            border-left: 5px solid #ef4444;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d1fae5;
+            border-left: 5px solid #10b981;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+        
+        .info-box {
+            background: #dbeafe;
+            border-left: 5px solid #3b82f6;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .badge-enterprise {
+            background: #1e3a8a;
+            color: white;
+        }
+        
+        .badge-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .badge-gold {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .benefit-item {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .benefit-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .benefit-item .icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+        
+        .benefit-item h4 {
+            color: #1e3a8a;
+            margin: 10px 0;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 60px 50px;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 40px;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+        }
+        
+        .cta-section h2 {
+            color: white;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: white;
+            color: #10b981;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2em;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .tech-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .tech-spec {
+            flex: 1;
+            min-width: 220px;
+            background: #f0f9ff;
+            padding: 18px;
+            border-radius: 8px;
+            border-top: 4px solid #3b82f6;
+        }
+        
+        .tech-spec strong {
+            color: #1e3a8a;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+        
+        ul.check-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        ul.check-list li {
+            padding: 10px 0;
+            padding-left: 35px;
+            position: relative;
+        }
+        
+        ul.check-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+        
+        ol.numbered-list {
+            padding-left: 25px;
+        }
+        
+        ol.numbered-list li {
+            padding: 12px 0;
+            font-size: 1.05em;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+            font-size: 0.95em;
+            margin-top: 40px;
+        }
+        
+        .pricing-note {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .pricing-note h3 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        strong {
+            color: #1e3a8a;
+        }
+        
+        .integration-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .integration-icon {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Waiting List Enterprise</h1>
+        <div class="tagline">Complete Waiting List Solution with Advanced POS Integration</div>
+        <div style="margin-top: 25px;">
+            <span class="enterprise-badge">⭐ ENTERPRISE EDITION ⭐</span>
+        </div>
+        <div style="margin-top: 15px;">
+            <span class="badge badge-enterprise">Odoo Enterprise 18.0</span>
+            <span class="badge badge-gold">POS Restaurant Integration</span>
+            <span class="badge badge-success">VIP Priority</span>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h3 style="margin-top: 0;">📦 Complete Package</h3>
+        <p style="font-size: 1.15em; margin: 0;">
+            <strong>This Enterprise Edition includes ALL features from the Base module PLUS exclusive Enterprise features!</strong>
+            Get the complete waiting list solution with advanced POS Restaurant integration, VIP management, 
+            floor-based organization, and SMS/WhatsApp notifications.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>🌟 What Makes Enterprise Edition Special?</h2>
+        
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <div class="icon">🏢</div>
+                <h4>Full POS Integration</h4>
+                <p>Seamless integration with Odoo POS Restaurant module for complete table management</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">⭐</div>
+                <h4>VIP Priority</h4>
+                <p>Automatic VIP detection and priority queue management</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">🏗️</div>
+                <h4>Floor Layouts</h4>
+                <p>Visual floor management with drag-and-drop table assignment</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">📱</div>
+                <h4>SMS & WhatsApp</h4>
+                <p>Real-time notifications when tables are ready</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">📊</div>
+                <h4>Advanced Analytics</h4>
+                <p>Comprehensive reporting with hostess performance tracking</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">⚡</div>
+                <h4>Smart Automation</h4>
+                <p>AI-powered wait time estimates and table suggestions</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📊 Feature Comparison: Base vs Enterprise</h2>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th style="text-align: center;">Base Module</th>
+                    <th style="text-align: center; background: #f59e0b;">Enterprise Edition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Core Waiting List Management</strong></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Allergen Management & Safety</strong></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Multi-Branch Support</strong></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Basic Table Management</strong></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Customer Database & History</strong></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Basic Dashboard & Reporting</strong></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Survey Integration</strong></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                    <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>POS Restaurant Integration</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Floor-Based Management</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>VIP Priority Queue</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>SMS & WhatsApp Notifications</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Smart Wait Time Estimates</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Automatic Table Suggestions</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Floor Overview Dashboard</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Advanced Analytics & Reporting</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Hostess Performance Tracking</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Table Utilization Analytics</strong></td>
+                    <td style="text-align: center;">—</td>
+                    <td style="text-align: center;"><span class="star-icon">⭐</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>✨ All Base Module Features Included</h2>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>📋 Smart Waiting List Management</h4>
+                <ul class="feature-list">
+                    <li>Real-time queue tracking</li>
+                    <li>Automatic queue numbers</li>
+                    <li>Status management (Waiting, Ready, Seated, etc.)</li>
+                    <li>Guest count tracking</li>
+                    <li>Automatic time tracking</li>
+                    <li>Notes & special requests</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🚨 Allergen Management & Safety</h4>
+                <ul class="feature-list">
+                    <li>Comprehensive allergen database</li>
+                    <li>Customer allergen profiles</li>
+                    <li>Auto-population for returning customers</li>
+                    <li>Visual safety alerts</li>
+                    <li>Bilingual support (English/Arabic)</li>
+                    <li>Cross-contamination prevention</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🏢 Multi-Branch Operations</h4>
+                <ul class="feature-list">
+                    <li>Branch-specific views</li>
+                    <li>Branch-level security</li>
+                    <li>Multi-company support</li>
+                    <li>Hostess assignment tracking</li>
+                    <li>Isolated data per location</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🍽️ Basic Table Management</h4>
+                <ul class="feature-list">
+                    <li>Table configuration & capacity</li>
+                    <li>Smart table assignment</li>
+                    <li>Table status tracking</li>
+                    <li>Branch-based organization</li>
+                    <li>Seating suggestions</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>👥 Customer Intelligence</h4>
+                <ul class="feature-list">
+                    <li>Customer database integration</li>
+                    <li>Visit history tracking</li>
+                    <li>Customer categories</li>
+                    <li>Smart search functionality</li>
+                    <li>Repeat customer recognition</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>📊 Basic Reporting & Analytics</h4>
+                <ul class="feature-list">
+                    <li>Interactive dashboard with KPIs</li>
+                    <li>Wait time analysis</li>
+                    <li>Cancellation tracking</li>
+                    <li>Customer insights</li>
+                    <li>Exportable reports</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>⭐ Exclusive Enterprise Features</h2>
+        
+        <div class="feature-grid">
+            <div class="feature-card enterprise-exclusive">
+                <h4>🏗️ POS Restaurant Integration</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">Full integration with pos_restaurant module</li>
+                    <li class="enterprise-feature">Automatic floor detection</li>
+                    <li class="enterprise-feature">Real-time table occupancy sync</li>
+                    <li class="enterprise-feature">One-click table assignment</li>
+                    <li class="enterprise-feature">Seamless workflow with POS orders</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card enterprise-exclusive">
+                <h4>🏢 Floor-Based Management</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">Visual floor layout integration</li>
+                    <li class="enterprise-feature">Floor overview dashboard</li>
+                    <li class="enterprise-feature">Per-floor waiting statistics</li>
+                    <li class="enterprise-feature">Floor-based queue management</li>
+                    <li class="enterprise-feature">Multi-floor support</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card enterprise-exclusive">
+                <h4>⭐ VIP & Priority Management</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">Automatic VIP detection</li>
+                    <li class="enterprise-feature">Priority queue system</li>
+                    <li class="enterprise-feature">Custom priority levels (0-10)</li>
+                    <li class="enterprise-feature">Smart FIFO within priority</li>
+                    <li class="enterprise-feature">VIP customer tracking</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card enterprise-exclusive">
+                <h4>📱 SMS & WhatsApp Notifications</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">SMS notification integration</li>
+                    <li class="enterprise-feature">WhatsApp Business API support</li>
+                    <li class="enterprise-feature">Multiple notification methods</li>
+                    <li class="enterprise-feature">Notification tracking & logs</li>
+                    <li class="enterprise-feature">Customizable message templates</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card enterprise-exclusive">
+                <h4>⚡ Smart Wait Time Estimates</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">AI-powered calculations</li>
+                    <li class="enterprise-feature">Party size adjustments</li>
+                    <li class="enterprise-feature">Priority-aware estimates</li>
+                    <li class="enterprise-feature">Real-time availability checks</li>
+                    <li class="enterprise-feature">Historical data analysis</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card enterprise-exclusive">
+                <h4>🎯 Automatic Table Suggestions</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">Smart table matching</li>
+                    <li class="enterprise-feature">Capacity validation</li>
+                    <li class="enterprise-feature">Availability checking</li>
+                    <li class="enterprise-feature">Optimal seating recommendations</li>
+                    <li class="enterprise-feature">Multi-criteria selection</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card enterprise-exclusive">
+                <h4>📊 Advanced Analytics</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">Hostess performance metrics</li>
+                    <li class="enterprise-feature">Table utilization reports</li>
+                    <li class="enterprise-feature">Peak hours analysis</li>
+                    <li class="enterprise-feature">Turnover rate tracking</li>
+                    <li class="enterprise-feature">Customer lifetime value</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card enterprise-exclusive">
+                <h4>🔔 Enhanced Notifications</h4>
+                <ul class="feature-list">
+                    <li class="enterprise-feature">Multi-channel communication</li>
+                    <li class="enterprise-feature">Automated reminders</li>
+                    <li class="enterprise-feature">Notification preferences</li>
+                    <li class="enterprise-feature">Delivery tracking</li>
+                    <li class="enterprise-feature">Template management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔒 Security & Access Control</h2>
+        <h3>Three-Tier Security Model (from Base):</h3>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>👑 Admin</h4>
+                <p>Full system access, configuration, and all enterprise features</p>
+            </div>
+            <div class="feature-card">
+                <h4>👔 Branch Manager</h4>
+                <p>Branch-specific management, analytics, and POS integration</p>
+            </div>
+            <div class="feature-card">
+                <h4>👨‍💼 Hostess/Host</h4>
+                <p>Waiting list operations, table assignment, and notifications</p>
+            </div>
+        </div>
+        
+        <ul class="check-list">
+            <li>Record-level security with automatic data isolation by branch</li>
+            <li>Complete audit trail of all status changes with user and timestamp</li>
+            <li>Role-based menu access for enterprise features</li>
+            <li>Secure customer data handling and GDPR compliance</li>
+            <li>Enhanced security for notification systems</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🎯 Perfect For</h2>
+        <ul class="check-list">
+            <li><strong>High-End Restaurants:</strong> VIP management and priority seating</li>
+            <li><strong>Multi-Location Chains:</strong> Centralized management across branches</li>
+            <li><strong>Busy Restaurants:</strong> Advanced floor and table management</li>
+            <li><strong>Hotels & Resorts:</strong> Multiple dining outlets with unified system</li>
+            <li><strong>Fine Dining Establishments:</strong> Premium customer experience</li>
+            <li><strong>Restaurant Groups:</strong> Comprehensive analytics and reporting</li>
+            <li><strong>Franchise Operations:</strong> Standardized processes with local flexibility</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Quick Start</h2>
+        
+        <div class="highlight-box">
+            <strong>Prerequisites:</strong>
+            <ul style="margin: 10px 0;">
+                <li>Odoo Enterprise Edition 18.0</li>
+                <li>POS Restaurant module installed and configured</li>
+                <li>Waiting List Base module (installed automatically as dependency)</li>
+            </ul>
+        </div>
+        
+        <ol class="numbered-list">
+            <li><strong>Install the Module:</strong> Install from Apps menu (Base module installs automatically)</li>
+            <li><strong>Configure POS Restaurant:</strong> Set up floors and tables in Point of Sale settings</li>
+            <li><strong>Configure Settings:</strong> Navigate to Settings → Waiting List and configure branches</li>
+            <li><strong>Set Up Notifications:</strong> Configure SMS/WhatsApp credentials (optional)</li>
+            <li><strong>Configure Customer Categories:</strong> Set up VIP categories for priority management</li>
+            <li><strong>Start Using:</strong> Open Waiting List menu and experience the full power of Enterprise</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>📦 What's Included</h2>
+        
+        <h3>All Base Module Components:</h3>
+        <ul class="feature-list">
+            <li>Core waiting list models and workflows</li>
+            <li>Allergen management system</li>
+            <li>Customer database extensions</li>
+            <li>Basic table management</li>
+            <li>Dashboard and reporting</li>
+            <li>Security infrastructure</li>
+            <li>Pre-configured data</li>
+        </ul>
+        
+        <h3>Plus Enterprise Extensions:</h3>
+        <ul class="feature-list">
+            <li>POS Restaurant integration models</li>
+            <li>Floor and table synchronization</li>
+            <li>VIP and priority management</li>
+            <li>Notification system (SMS/WhatsApp)</li>
+            <li>Advanced analytics modules</li>
+            <li>Enhanced dashboard views</li>
+            <li>Enterprise-specific security rules</li>
+            <li>Performance tracking tools</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🔗 Integration Capabilities</h2>
+        
+        <div class="integration-icons">
+            <div class="integration-icon">📱 Odoo POS Restaurant</div>
+            <div class="integration-icon">💬 WhatsApp Business</div>
+            <div class="integration-icon">📲 SMS Gateway</div>
+            <div class="integration-icon">📊 Odoo Analytics</div>
+            <div class="integration-icon">👥 Odoo CRM</div>
+            <div class="integration-icon">📧 Email Marketing</div>
+        </div>
+        
+        <h3>Ready for Additional Integrations:</h3>
+        <ul class="check-list">
+            <li><strong>waiting_list_foodics:</strong> Foodics POS integration</li>
+            <li><strong>waiting_list_spreadsheet:</strong> Advanced spreadsheet reporting</li>
+            <li><strong>Custom integrations:</strong> API-ready architecture</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>� Screenshots</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin: 30px 0;">
+            <div style="text-align: center;">
+                <img src="screenshot_1.png" alt="Enterprise Dashboard" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Enterprise Dashboard with VIP Priority</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_2.png" alt="POS Integration" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">POS Restaurant Integration</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_3.png" alt="Floor Management" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Floor & Table Management</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_4.png" alt="Notifications" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">SMS & WhatsApp Notifications</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_5.png" alt="Advanced Analytics" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Advanced Analytics</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>�📋 Technical Details</h2>
+        <div class="tech-specs">
+            <div class="tech-spec">
+                <strong>Version</strong>
+                18.0.1.21.0
+            </div>
+            <div class="tech-spec">
+                <strong>Odoo Version</strong>
+                18.0 Enterprise
+            </div>
+            <div class="tech-spec">
+                <strong>License</strong>
+                OEEL-1 (Enterprise)
+            </div>
+            <div class="tech-spec">
+                <strong>Category</strong>
+                Sales / Point Of Sale
+            </div>
+            <div class="tech-spec">
+                <strong>Dependencies</strong>
+                waiting_list_base, pos_restaurant, base_setup, sms
+            </div>
+            <div class="tech-spec">
+                <strong>Module Type</strong>
+                Enterprise Extension
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔄 Compatibility</h2>
+        <div class="success-box">
+            <strong>✓ Requires Odoo Enterprise Edition 18.0</strong>
+            <p style="margin: 10px 0 0 0;">This module extends Enterprise-only features and requires a valid Odoo Enterprise license or Odoo.sh subscription.</p>
+        </div>
+        
+        <ul class="check-list">
+            <li>Odoo Enterprise Edition 18.0 (required)</li>
+            <li>Odoo.sh hosting platform (fully compatible)</li>
+            <li>POS Restaurant module (required)</li>
+            <li>Multi-company environments</li>
+            <li>Multi-currency support</li>
+            <li>Cloud and on-premise deployments</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🏆 Why Choose Enterprise Edition?</h2>
+        
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <div class="icon">🎯</div>
+                <h4>Complete Solution</h4>
+                <p>Everything you need in one package - no additional modules required</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">⚡</div>
+                <h4>Maximum Efficiency</h4>
+                <p>Streamlined operations with automation and smart features</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">📈</div>
+                <h4>Data-Driven Decisions</h4>
+                <p>Advanced analytics provide actionable insights</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">💎</div>
+                <h4>Premium Experience</h4>
+                <p>VIP management ensures top-tier customer satisfaction</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">🔐</div>
+                <h4>Enterprise-Grade</h4>
+                <p>Built for large-scale operations with robust security</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">🚀</div>
+                <h4>Future-Proof</h4>
+                <p>Regular updates and continuous feature enhancements</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>💰 Return on Investment</h2>
+        
+        <h3>For Restaurant Owners:</h3>
+        <ul class="feature-list">
+            <li>Increase table turnover rate by 15-25%</li>
+            <li>Reduce no-shows through automated notifications</li>
+            <li>Improve VIP customer retention and satisfaction</li>
+            <li>Better staff productivity with streamlined workflows</li>
+            <li>Data-driven decisions reduce operational costs</li>
+            <li>Enhanced customer safety reduces liability risks</li>
+        </ul>
+        
+        <h3>For Managers:</h3>
+        <ul class="feature-list">
+            <li>Real-time visibility across all locations</li>
+            <li>Performance metrics for staff accountability</li>
+            <li>Capacity planning with historical data</li>
+            <li>Optimize staffing based on peak hours</li>
+            <li>Professional image with modern technology</li>
+        </ul>
+        
+        <h3>For Customers:</h3>
+        <ul class="feature-list">
+            <li>Shorter perceived wait times with notifications</li>
+            <li>VIP recognition and preferential treatment</li>
+            <li>Safety assurance with allergen tracking</li>
+            <li>Consistent high-quality experience</li>
+            <li>Modern, tech-forward service</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🎨 Customization & Extensibility</h2>
+        <p>Built with enterprise-grade architecture:</p>
+        <ul class="feature-list">
+            <li>Modular design for easy customization</li>
+            <li>Well-documented code following Odoo best practices</li>
+            <li>Extensible models with proper inheritance</li>
+            <li>Custom views that can be inherited and extended</li>
+            <li>API-ready for third-party integrations</li>
+            <li>Support for custom notification providers</li>
+            <li>Webhook support for external systems</li>
+            <li>Custom report development capabilities</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ System Requirements</h2>
+        <ul class="feature-list">
+            <li><strong>Odoo:</strong> Enterprise Edition 18.0 (required)</li>
+            <li><strong>Python:</strong> 3.10+</li>
+            <li><strong>Required Modules:</strong> pos_restaurant, base_setup, sms</li>
+            <li><strong>Browser:</strong> Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+            <li><strong>Recommended:</strong> SMS/WhatsApp service account for notifications</li>
+        </ul>
+    </div>
+
+    <div class="pricing-note">
+        <h3>🎫 Licensing Note</h3>
+        <p style="font-size: 1.15em; margin: 15px 0;">
+            This module requires <strong>Odoo Enterprise Edition</strong> or <strong>Odoo.sh</strong> subscription.
+            It cannot be installed on Odoo Community Edition due to dependencies on Enterprise-only modules (pos_restaurant).
+        </p>
+        <p style="margin: 10px 0;">
+            For Community Edition users, please see <strong>waiting_list_base</strong> module.
+        </p>
+    </div>
+
+    <div class="cta-section">
+        <h2>🎉 Ready to Transform Your Restaurant Operations?</h2>
+        <p>
+            Experience the complete Enterprise solution with advanced POS integration, VIP management, 
+            and intelligent automation!
+        </p>
+        <p style="font-size: 1.15em; margin-top: 30px;">
+            <strong>Complete Package</strong> • <strong>Enterprise Power</strong> • <strong>Professional Grade</strong> • <strong>Safety First</strong>
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>
+            <strong>Developed by Mazen</strong><br>
+            For support, customization, and enterprise deployment inquiries, contact through Odoo App Store
+        </p>
+        <p style="margin-top: 20px; font-size: 0.9em;">
+            This module is licensed under OEEL-1 (Odoo Enterprise Edition License). 
+            Requires valid Odoo Enterprise license or Odoo.sh subscription.
+        </p>
+        <p style="margin-top: 15px; color: #3b82f6; font-weight: 600;">
+            ⭐ Part of the Professional Restaurant Management Suite ⭐
+        </p>
+    </div>
+</body>
+</html>

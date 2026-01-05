@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Enhanced Waiting List Form View with Restaurant Integration -->
+    <record id="view_waiting_list_form_enterprise" model="ir.ui.view">
+        <field name="name">waiting.list.form.enterprise</field>
+        <field name="model">waiting.list</field>
+        <field name="inherit_id" ref="waiting_list_base.view_waiting_list_form"/>
+        <field name="arch" type="xml">
+            <!-- Add POS/Table information after party_size -->
+            <xpath expr="//field[@name='party_size']" position="after">
+                <field name="is_vip" readonly="1"/>
+                <field name="priority" widget="priority"/>
+            </xpath>
+            
+            <!-- Replace second group (company_id group) with simplified version -->
+            <xpath expr="//sheet/group[1]/group[2]" position="replace">
+                
+                <group>
+                    <field name="pos_config_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="floor_id" options="{'no_create': True, 'no_open': True}"/>
+                    <label for="table_id" string="Table" class="fw-bold" 
+                            style="color: #dc3545;" 
+                            invisible="waiting_type != 'walkin'"/>
+                    <label for="table_id" string="Table" 
+                            invisible="waiting_type == 'walkin'"/>
+                    <div>
+                        <field name="table_id" 
+                                options="{'no_create': True}"
+                                class="fw-bold"
+                                required="waiting_type == 'walkin'"/>
+                        <span invisible="waiting_type != 'walkin' or table_id" 
+                                class="text-danger small">
+                            <i class="fa fa-exclamation-triangle"/> Required for walk-ins
+                        </span>
+                    </div>
+                    <field name="table_capacity" readonly="1"/>
+                    <field name="preferred_seating"/>
+                    <field name="calculation_type" widget="radio" options="{'horizontal': true}"/>
+                    <label for="manual_wait_time" string="Manual Wait Time" invisible="calculation_type != 'manual'"/>
+                    <div invisible="calculation_type != 'manual'">
+                        <field name="manual_wait_time" widget="float_time" class="oe_inline" 
+                               placeholder="Enter wait time in minutes..."/>
+                        <span class="ms-2 text-muted">minutes</span>
+                    </div>
+                    <label for="estimated_wait_time" string="Estimated Wait" invisible="calculation_type == 'manual'"/>
+                    <div invisible="calculation_type == 'manual'">
+                        <field name="estimated_wait_time" widget="float_time" class="oe_inline" 
+                               placeholder="Auto-calculated..." readonly="1"/>
+                        <button name="action_recalculate_wait_time" 
+                                type="object" 
+                                string="Recalculate" 
+                                class="btn-link btn-sm ms-2"
+                                icon="fa-refresh"
+                                invisible="status not in ('waiting', 'ready')"
+                                title="Recalculate estimated wait time based on current queue"/>
+                        <div class="text-muted small" invisible="not wait_time_source">
+                            <i class="fa fa-info-circle"/> <field name="wait_time_source" readonly="1"/>
+                        </div>
+                    </div>
+                    <label for="estimated_wait_time" string="Final Estimated Wait" invisible="calculation_type != 'manual'"/>
+                    <div invisible="calculation_type != 'manual'">
+                        <field name="estimated_wait_time" widget="float_time" class="oe_inline" readonly="1"/>
+                        <span class="ms-2 text-muted">minutes</span>
+                        <div class="text-muted small" invisible="not wait_time_source">
+                            <i class="fa fa-info-circle"/> <field name="wait_time_source" readonly="1"/>
+                        </div>
+                    </div>
+                </group>
+            </xpath>
+            
+            <!-- Add Smart Buttons -->
+            <xpath expr="//div[@class='oe_title']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_notifications" 
+                            type="object" 
+                            class="oe_stat_button" 
+                            icon="fa-bell"
+                            invisible="notification_count == 0">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="notification_count" widget="statinfo" nolabel="1"/>
+                            </span>
+                            <span class="o_stat_text">Notifications</span>
+                        </div>
+                        <div class="o_field_widget o_stat_info mt-1" invisible="notification_pending_count == 0">
+                            <span class="o_stat_value text-warning">
+                                <field name="notification_pending_count" widget="integer" nolabel="1"/>
+                            </span>
+                            <span class="o_stat_text">Pending</span>
+                        </div>
+                        <div class="o_field_widget o_stat_info mt-1" invisible="notification_failed_count == 0">
+                            <span class="o_stat_value text-danger">
+                                <field name="notification_failed_count" widget="integer" nolabel="1"/>
+                            </span>
+                            <span class="o_stat_text">Failed</span>
+                        </div>
+                    </button>
+                    <field name="notification_sent_count" invisible="1"/>
+                </div>
+            </xpath>
+            
+            <!-- Add Restaurant Integration Group after first group -->
+            <xpath expr="//sheet/group[1]" position="after">
+                <!-- Walk-in Alert Message -->
+                <div class="alert alert-info" role="alert" invisible="waiting_type != 'walkin'">
+                    <h5><i class="fa fa-info-circle"/> Walk-In Customer</h5>
+                    <p><strong>Please select a table below.</strong> The customer will be automatically seated upon saving.</p>
+                    <p class="mb-0">A feedback survey will be sent after marking the visit as complete.</p>
+                </div>
+                
+                <notebook>
+                  
+                </notebook>
+            </xpath>
+            
+            <!-- Add to existing notebook created by waiting_list_base -->
+            <xpath expr="//notebook/page[@name='feedback']" position="after">
+                    <!-- Customer Intelligence Tab -->
+                    <page string="Customer Intelligence" name="customer_intelligence">
+                        <group>
+                            <group>
+                                <div class="alert alert-info" role="alert" style="margin-bottom: 10px;" invisible="not customer_id">
+                                    <h5>
+                                        <i class="fa fa-line-chart"/> Customer Visit History
+                                        <span invisible="not is_vip" class="badge badge-warning" style="margin-left: 10px;">⭐ VIP</span>
+                                    </h5>
+                                </div>
+                                <div class="alert alert-warning" role="alert" invisible="customer_id">
+                                    <i class="fa fa-info-circle"/> Select a customer to view visit history and spending analytics.
+                                </div>
+                                <field name="currency_id" column_invisible="1"/>
+                                <separator string="Visit Statistics" invisible="not customer_id"/>
+                                <div class="alert alert-secondary" role="alert" style="padding: 5px 10px; margin-bottom: 10px;" 
+                                     invisible="not customer_id or last_10_visits_total &gt; 0">
+                                    <small><i class="fa fa-info-circle"/> Visit count from waiting list entries. Spending data will appear after POS orders are recorded.</small>
+                                </div>
+                                <label for="last_visit_date" string="Last Visit" invisible="not customer_id"/>
+                                <div invisible="not customer_id">
+                                    <field name="last_visit_date" widget="datetime" readonly="1" class="oe_inline"/>
+                                </div>
+                                <label for="last_visit_amount" string="Last Spend" invisible="not customer_id"/>
+                                <div invisible="not customer_id">
+                                    <field name="last_visit_amount" widget="monetary" readonly="1" class="oe_inline"/>
+                                </div>
+                                <label for="total_visits" string="Total Visits" invisible="not customer_id"/>
+                                <div invisible="not customer_id">
+                                    <field name="total_visits" readonly="1" class="oe_inline"/>
+                                    <small class="text-muted ms-2" invisible="last_10_visits_total &gt; 0">
+                                        (from waiting list)
+                                    </small>
+                                    <small class="text-muted ms-2" invisible="last_10_visits_total == 0">
+                                        (from POS orders)
+                                    </small>
+                                </div>
+                            </group>
+                            <group>
+                                <separator string="Spending Analytics" invisible="not customer_id"/>
+                                <label for="last_10_visits_total" string="Last 10 Visits Total" invisible="not customer_id"/>
+                                <div invisible="not customer_id">
+                                    <field name="last_10_visits_total" widget="monetary" readonly="1" class="oe_inline"/>
+                                </div>
+                                <label for="average_spend_per_visit" string="Average Per Visit" invisible="not customer_id"/>
+                                <div invisible="not customer_id">
+                                    <field name="average_spend_per_visit" widget="monetary" readonly="1" class="oe_inline"/>
+                                </div>
+                                
+                                <separator string="Reliability" invisible="not customer_id"/>
+                                <label for="customer_no_show_count" string="No-Shows" invisible="not customer_id"/>
+                                <div invisible="not customer_id">
+                                    <field name="customer_no_show_count" readonly="1" class="oe_inline" 
+                                           decoration-danger="customer_no_show_count &gt;= 3"
+                                           decoration-warning="customer_no_show_count &gt;= 1"/>
+                                    <span invisible="customer_no_show_count &lt; 3" class="text-danger ms-2">
+                                        <i class="fa fa-exclamation-triangle"/> High Risk
+                                    </span>
+                                </div>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Restaurant Assignment" name="restaurant_assignment">
+                        <group>
+                            <group>
+                                <field name="create_date" readonly="1"/>
+                                <field name="seated_time" readonly="1"/>
+                                <field name="actual_wait_time" widget="float_time" readonly="1"/>
+                            </group>
+                            <group>
+                                
+                                <label for="estimated_wait_time" string="Estimated Wait"/>
+                                
+                                <field name="table_assigned_time" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
+                      <page string="Wait Time Analysis" name="wait_time_analysis" invisible="status not in ('seated', 'done')">
+                        <group>
+                            <group string="Time Comparison">
+                                <field name="estimated_wait_time" widget="float_time" readonly="1"/>
+                                <field name="actual_wait_time" widget="float_time" readonly="1"/>
+                                <field name="wait_time_variance" widget="float_time" readonly="1"/>
+                                <field name="wait_time_accuracy" widget="progressbar" readonly="1"/>
+                            </group>
+                            <group string="Calculation Details">
+                                <field name="wait_time_source" readonly="1"/>
+                                <field name="calculation_type" readonly="1"/>
+                                <field name="manual_wait_time" widget="float_time" readonly="1" invisible="calculation_type != 'manual'"/>
+                            </group>
+                        </group>
+                        <div class="alert alert-success" role="alert" invisible="wait_time_accuracy &lt; 80">
+                            <h5><i class="fa fa-check-circle"/> Excellent Wait Time Prediction!</h5>
+                            <p>The estimated wait time was very accurate (>80% accuracy).</p>
+                        </div>
+                        <div class="alert alert-warning" role="alert" invisible="wait_time_accuracy &gt;= 80 or wait_time_accuracy &lt; 50">
+                            <h5><i class="fa fa-exclamation-triangle"/> Moderate Wait Time Variance</h5>
+                            <p>Consider reviewing wait time calculation settings to improve accuracy.</p>
+                        </div>
+                        <div class="alert alert-danger" role="alert" invisible="wait_time_accuracy &gt;= 50">
+                            <h5><i class="fa fa-times-circle"/> Large Wait Time Variance</h5>
+                            <p>The estimated wait time was significantly different from actual time. Please review calculation settings.</p>
+                        </div>
+                    </page>
+                    <page string="Notifications" name="notifications" invisible="status in ('cancelled', 'no_show')">
+                        <group>
+                            <group>
+                                <field name="notification_type"/>
+                                <field name="auto_send_queue_notification"/>
+                                <field name="notification_sent" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="notification_time" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
+                    <!-- Additional Information Tab -->
+                    <page string="Additional Information" name="additional_info">
+                        <group>
+                            <group string="System Information">
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="currency_id"/>
+                            </group>
+                            <group>
+                                <!-- Reserved for future fields -->
+                            </group>
+                        </group>
+                    </page>
+            </xpath>
+            
+            <!-- Add action buttons in header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_suggest_tables" 
+                        string="Select Table" 
+                        type="object" 
+                        class="btn-primary"
+                        icon="fa-search"
+                        invisible="not id or status not in ('waiting', 'ready', 'called') or table_id or not floor_id"/>
+                <button name="action_assign_table" 
+                        string="Assign Table" 
+                        type="object" 
+                        class="btn-success"
+                        invisible="not id or status not in ('waiting', 'ready', 'called') or not table_id"/>
+                <button name="action_send_notification" 
+                        string="Notify Customer" 
+                        type="object" 
+                        class="btn-info"
+                        invisible="not id or not table_id or status not in ('ready',) or notification_sent"/>
+                <button name="action_refresh_table_status" 
+                        string="Refresh Table Status" 
+                        type="object" 
+                        class="btn-secondary"
+                        icon="fa-refresh"
+                        invisible="not id or not table_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Enhanced Tree View with Table Info -->
+    <record id="view_waiting_list_tree_enterprise" model="ir.ui.view">
+        <field name="name">waiting.list.tree.enterprise</field>
+        <field name="model">waiting.list</field>
+        <field name="inherit_id" ref="waiting_list_base.view_waiting_list_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='party_size']" position="after">
+                <field name="is_vip" column_invisible="1"/>
+                <field name="priority" widget="priority" optional="show"/>
+                <field name="floor_id" optional="show"/>
+                <field name="table_id" optional="show"/>
+                <field name="estimated_wait_time" widget="float_time" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Enhanced Kanban View with Table Assignment -->
+    <record id="view_waiting_list_kanban_enterprise" model="ir.ui.view">
+        <field name="name">waiting.list.kanban.enterprise</field>
+        <field name="model">waiting.list</field>
+        <field name="inherit_id" ref="waiting_list_base.view_waiting_list_kanban"/>
+        <field name="arch" type="xml">
+            <!-- Add enterprise fields to kanban -->
+            <xpath expr="//kanban" position="inside">
+                <field name="is_vip"/>
+                <field name="priority"/>
+                <field name="floor_id"/>
+                <field name="table_id"/>
+                <field name="estimated_wait_time"/>
+            </xpath>
+            
+            <!-- Add VIP badge and table info -->
+            <xpath expr="//div[hasclass('oe_kanban_details')]" position="inside">
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <t t-if="record.is_vip.raw_value">
+                            <span class="badge badge-warning">VIP</span>
+                        </t>
+                        <t t-if="record.priority.raw_value and record.priority.raw_value != '0'">
+                            <span class="ms-1">
+                                <field name="priority" widget="priority"/>
+                            </span>
+                        </t>
+                    </div>
+                </div>
+                <t t-if="record.floor_id.raw_value">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <i class="fa fa-building"/> <field name="floor_id"/>
+                            <t t-if="record.table_id.raw_value">
+                                <span class="ms-2">
+                                    <i class="fa fa-table"/> <field name="table_id"/>
+                                </span>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+                <t t-if="record.estimated_wait_time.raw_value > 0">
+                    <div class="row mt-1">
+                        <div class="col-12 text-muted">
+                            <i class="fa fa-clock-o"/> Est. Wait: <field name="estimated_wait_time" widget="float_time"/>
+                        </div>
+                        <div class="col-12 text-muted small" t-if="record.wait_time_source.raw_value">
+                            <field name="wait_time_source"/>
+                        </div>
+                    </div>
+                </t>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search View Enhancement -->
+    <record id="view_waiting_list_search_enterprise" model="ir.ui.view">
+        <field name="name">waiting.list.search.enterprise</field>
+        <field name="model">waiting.list</field>
+        <field name="inherit_id" ref="waiting_list_base.view_waiting_list_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="pos_config_id"/>
+                <field name="floor_id"/>
+                <field name="table_id"/>
+                <filter string="VIP" name="filter_vip" domain="[('is_vip', '=', True)]"/>
+                <filter string="High Priority" name="filter_high_priority" domain="[('priority', 'in', ['4', '5'])]"/>
+                <filter string="With Table" name="filter_with_table" domain="[('table_id', '!=', False)]"/>
+                <filter string="No Table Assigned" name="filter_no_table" domain="[('table_id', '=', False), ('status', 'in', ['waiting', 'ready'])]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Floor" name="group_floor" context="{'group_by': 'floor_id'}"/>
+                    <filter string="Table" name="group_table" context="{'group_by': 'table_id'}"/>
+                    <filter string="POS Config" name="group_pos_config" context="{'group_by': 'pos_config_id'}"/>
+                    <filter string="VIP Status" name="group_vip" context="{'group_by': 'is_vip'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Floor-based Dashboard Action -->
+    <record id="action_waiting_list_by_floor" model="ir.actions.act_window">
+        <field name="name">Waiting List by Floor</field>
+        <field name="res_model">waiting.list</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_waiting_list_kanban_enterprise')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('waiting_list_base.view_waiting_list_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_waiting_list_form_enterprise')}),
+        ]"/>
+        <field name="domain">[('status', 'in', ['waiting', 'ready', 'called'])]</field>
+        <field name="context">{
+            'search_default_group_floor': 1,
+            'default_status': 'waiting',
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add customers to the waiting list
+            </p>
+            <p>
+                Manage restaurant waiting list with floor and table assignments.
+            </p>
+        </field>
+    </record>
+
+    <!-- Enhanced Pivot View with POS and Floor Analytics -->
+    <record id="view_waiting_list_pivot_enterprise" model="ir.ui.view">
+        <field name="name">waiting.list.pivot.enterprise</field>
+        <field name="model">waiting.list</field>
+        <field name="inherit_id" ref="waiting_list_base.view_waiting_list_pivot"/>
+        <field name="arch" type="xml">
+            <!-- Add POS Config and Floor to analysis after status -->
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="pos_config_id" type="row"/>
+                <field name="floor_id" type="row"/>
+            </xpath>
+            <!-- estimated_wait_time measure removed as requested -->
+        </field>
+    </record>
+
+    <!-- Enhanced Graph View with Floor Analytics -->
+    <record id="view_waiting_list_graph_enterprise" model="ir.ui.view">
+        <field name="name">waiting.list.graph.enterprise</field>
+        <field name="model">waiting.list</field>
+        <field name="inherit_id" ref="waiting_list_base.view_waiting_list_graph"/>
+        <field name="arch" type="xml">
+            <!-- Add floor dimension option -->
+            <xpath expr="//field[@name='status']" position="after">
+                <field name="floor_id" type="col"/>
+            </xpath>
+            
+          
+        </field>
+    </record>
+
+    <!-- Table Assignment Action -->
+    <record id="action_waiting_list_table_assignment" model="ir.actions.act_window">
+        <field name="name">Table Assignment</field>
+        <field name="res_model">waiting.list</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('waiting_list_base.view_waiting_list_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_waiting_list_form_enterprise')}),
+        ]"/>
+        <field name="domain">[('status', 'in', ['waiting', 'ready']), ('table_id', '=', False)]</field>
+        <field name="context">{
+            'default_status': 'waiting',
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers waiting for table assignment
+            </p>
+        </field>
+    </record>
+
+</odoo>

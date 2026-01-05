@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Items for Enterprise Features -->
+    
+    <!-- Floor-based Waiting List Menu -->
+    <menuitem id="menu_waiting_list_by_floor"
+              name="By Floor"
+              parent="waiting_list_base.menu_waiting_list_main"
+              action="action_waiting_list_by_floor"
+              sequence="10"/>
+    
+    <!-- Table Assignment Menu -->
+    <menuitem id="menu_waiting_list_table_assignment"
+              name="Table Assignment"
+              parent="waiting_list_base.menu_waiting_list_main"
+              action="action_waiting_list_table_assignment"
+              sequence="15"/>
+    
+    <!-- Restaurant Floor Overview -->
+    <menuitem id="menu_restaurant_floor_overview"
+              name="Floor Overview"
+              parent="waiting_list_base.menu_waiting_list_main"
+              action="action_restaurant_floor_overview"
+              sequence="20"/>
+    
+    <!-- Customer Analysis Dashboard (under Reporting) -->
+    <menuitem id="menu_customer_analysis"
+              name="Customer Analysis"
+              parent="waiting_list_base.menu_waiting_list_reporting"
+              sequence="4"/>
+
+</odoo>

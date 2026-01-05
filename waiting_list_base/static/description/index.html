@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting List - Base Module</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+        }
+        
+        .header .tagline {
+            font-size: 1.4em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+        
+        .section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .alert-box {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .badge-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .badge-info {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .benefit-item {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .benefit-item .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #28a745;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .tech-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .tech-spec {
+            flex: 1;
+            min-width: 200px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-top: 3px solid #667eea;
+        }
+        
+        .tech-spec strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        ul.check-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        ul.check-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        ul.check-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .screenshot-placeholder {
+            background: #e9ecef;
+            border: 2px dashed #adb5bd;
+            border-radius: 8px;
+            padding: 60px;
+            text-align: center;
+            color: #6c757d;
+            margin: 20px 0;
+        }
+        
+        ol.numbered-list {
+            padding-left: 20px;
+        }
+        
+        ol.numbered-list li {
+            padding: 10px 0;
+            font-size: 1.05em;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🍽️ Waiting List - Base Module</h1>
+        <div class="tagline">Transform Your Restaurant Queue Management</div>
+        <div style="margin-top: 20px;">
+            <span class="badge badge-success">Community Compatible</span>
+            <span class="badge badge-info">Odoo 18.0</span>
+            <span class="badge badge-primary">Professional Grade</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🌟 Why Choose This Module?</h2>
+        <p style="font-size: 1.2em; color: #555;">
+            Streamline your restaurant's waiting list operations with this comprehensive, professional-grade 
+            waiting list management system designed specifically for restaurants. Perfect for restaurants of all sizes, 
+            from single locations to multi-branch operations.
+        </p>
+        
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <div class="icon">🛡️</div>
+                <strong>Safety First</strong>
+                <p>Comprehensive allergen tracking protects customers and your business</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">🚀</div>
+                <strong>Easy to Use</strong>
+                <p>Intuitive interface designed for busy restaurant environments</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">📊</div>
+                <strong>Data-Driven</strong>
+                <p>Real-time analytics and insights for better decisions</p>
+            </div>
+            <div class="benefit-item">
+                <div class="icon">🏢</div>
+                <strong>Scalable</strong>
+                <p>Grows from single location to multi-branch operations</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>✨ Key Features</h2>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>📋 Smart Waiting List Management</h4>
+                <ul class="feature-list">
+                    <li>Real-time queue tracking</li>
+                    <li>Automatic queue numbers</li>
+                    <li>Status management (Waiting, Ready, Seated, etc.)</li>
+                    <li>Guest count tracking</li>
+                    <li>Automatic time tracking</li>
+                    <li>Notes & special requests</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🏢 Multi-Branch Operations</h4>
+                <ul class="feature-list">
+                    <li>Branch-specific views</li>
+                    <li>Branch-level security</li>
+                    <li>Multi-company support</li>
+                    <li>Hostess assignment tracking</li>
+                    <li>Isolated data per location</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🍽️ Table Management</h4>
+                <ul class="feature-list">
+                    <li>Table configuration & capacity</li>
+                    <li>Smart table assignment</li>
+                    <li>Table status tracking</li>
+                    <li>Branch-based table organization</li>
+                    <li>Optimal seating suggestions</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>👥 Customer Intelligence</h4>
+                <ul class="feature-list">
+                    <li>Customer database integration</li>
+                    <li>Visit history tracking</li>
+                    <li>Customer categories</li>
+                    <li>Smart search functionality</li>
+                    <li>Repeat customer recognition</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>📊 Survey Integration</h4>
+                <ul class="feature-list">
+                    <li>Customer feedback collection</li>
+                    <li>Satisfaction tracking</li>
+                    <li>Customizable surveys</li>
+                    <li>Built-in Odoo survey module support</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>📈 Reporting & Analytics</h4>
+                <ul class="feature-list">
+                    <li>Interactive dashboard with KPIs</li>
+                    <li>Wait time analysis</li>
+                    <li>Cancellation tracking</li>
+                    <li>Customer insights</li>
+                    <li>Exportable reports</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🚨 Allergen Management & Safety Tracking</h2>
+        <div class="alert-box">
+            <strong>Critical Safety Feature!</strong> One of the most important features for modern restaurant operations.
+        </div>
+        
+        <div class="feature-grid">
+            <div class="feature-card" style="border-left-color: #dc3545;">
+                <ul class="feature-list">
+                    <li><strong>Comprehensive Allergen Database:</strong> Pre-configured with common allergens</li>
+                    <li><strong>Customer Allergen Profiles:</strong> Store permanent allergen information per customer</li>
+                    <li><strong>Auto-Population:</strong> Allergen info appears automatically when customer returns</li>
+                    <li><strong>Visual Safety Alerts:</strong> Prominent warnings when seating customers with allergens</li>
+                    <li><strong>Bilingual Support:</strong> Allergen information in English and Arabic</li>
+                    <li><strong>Cross-Contamination Prevention:</strong> Helps ensure customer safety</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔒 Security & Access Control</h2>
+        <h3>Three-Tier Security Model:</h3>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>👑 Admin</h4>
+                <p>Full system access and configuration</p>
+            </div>
+            <div class="feature-card">
+                <h4>👔 Branch Manager</h4>
+                <p>Branch-specific management and oversight</p>
+            </div>
+            <div class="feature-card">
+                <h4>👨‍💼 Hostess/Host</h4>
+                <p>Waiting list operations only</p>
+            </div>
+        </div>
+        
+        <ul class="check-list">
+            <li>Record-level security with automatic data isolation by branch</li>
+            <li>Complete audit trail of all status changes with user and timestamp</li>
+            <li>Role-based menu access</li>
+            <li>Secure customer data handling</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🎯 Perfect For</h2>
+        <ul class="check-list">
+            <li>Fine Dining Restaurants</li>
+            <li>Casual Dining Establishments</li>
+            <li>Multi-Branch Restaurant Groups</li>
+            <li>Restaurant Chains and Franchises</li>
+            <li>Hotels with Multiple Dining Outlets</li>
+            <li>Food Courts and Food Halls</li>
+            <li>Any business with customer waiting queues</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Quick Start</h2>
+        <ol class="numbered-list">
+            <li><strong>Install the Module:</strong> Install from Apps menu</li>
+            <li><strong>Configure Settings:</strong> Set up branches and basic configuration in Settings → Waiting List</li>
+            <li><strong>Add Tables:</strong> Configure your tables and seating capacity</li>
+            <li><strong>Configure Allergens:</strong> Review and customize allergen list if needed</li>
+            <li><strong>Start Using:</strong> Open Waiting List menu and start adding customers to queue</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>📦 What's Included</h2>
+        
+        <h3>Models</h3>
+        <ul class="feature-list">
+            <li><code>waiting.list</code> - Core waiting list entries with full lifecycle tracking</li>
+            <li><code>waiting.list.allergen</code> - Allergen master data and tracking</li>
+            <li><code>res.partner</code> - Extended customer profiles with allergen information</li>
+            <li>Wizard for quick customer addition</li>
+        </ul>
+        
+        <h3>Views</h3>
+        <ul class="feature-list">
+            <li>Comprehensive dashboard view with KPIs and metrics</li>
+            <li>Waiting list management (tree, form, kanban views)</li>
+            <li>Table management interface</li>
+            <li>Allergen management and configuration</li>
+            <li>Customer profile views with allergen display</li>
+            <li>Settings configuration panel</li>
+        </ul>
+        
+        <h3>Data</h3>
+        <ul class="feature-list">
+            <li>Pre-configured allergen database</li>
+            <li>Customer category templates</li>
+            <li>Automated sequence generation</li>
+            <li>Sample configurations for quick start</li>
+        </ul>
+        
+        <h3>Security</h3>
+        <ul class="feature-list">
+            <li>Complete security groups and access rights</li>
+            <li>Record rules for multi-branch isolation</li>
+            <li>Role-based menu access</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>� Screenshots</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin: 30px 0;">
+            <div style="text-align: center;">
+                <img src="screenshot_1.png" alt="Waiting List Dashboard" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Waiting List Dashboard</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_2.png" alt="Customer Management" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Customer Management</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_3.png" alt="Allergen Tracking" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Allergen Safety Tracking</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_4.png" alt="Table Assignment" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Table Assignment</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="screenshot_5.png" alt="Reporting" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Analytics & Reporting</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>�📋 Technical Details</h2>
+        <div class="tech-specs">
+            <div class="tech-spec">
+                <strong>Version</strong>
+                18.0.1.26.0
+            </div>
+            <div class="tech-spec">
+                <strong>Odoo Version</strong>
+                18.0
+            </div>
+            <div class="tech-spec">
+                <strong>License</strong>
+                LGPL-3
+            </div>
+            <div class="tech-spec">
+                <strong>Category</strong>
+                Sales
+            </div>
+            <div class="tech-spec">
+                <strong>Dependencies</strong>
+                base, mail, survey
+            </div>
+            <div class="tech-spec">
+                <strong>Module Type</strong>
+                Base/Core module
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔄 Compatibility</h2>
+        <ul class="check-list">
+            <li>Odoo Community Edition 18.0</li>
+            <li>Odoo Enterprise Edition 18.0</li>
+            <li>Multi-company environments</li>
+            <li>Multi-currency (through Odoo core)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>📚 Additional Modules</h2>
+        <p>For advanced features, consider these companion modules:</p>
+        
+        <div class="info-box">
+            <strong>🏢 waiting_list_enterprise:</strong> Advanced table layouts with pos_restaurant integration, VIP priority, enhanced analytics
+        </div>
+        
+        <div class="info-box">
+            <strong>🔗 waiting_list_foodics:</strong> Foodics POS integration for seamless order management
+        </div>
+        
+        <div class="info-box">
+            <strong>📊 waiting_list_spreadsheet:</strong> Advanced reporting with Odoo Spreadsheet integration
+        </div>
+        
+        <div class="info-box">
+            <strong>💬 whatsapp_waitinglist:</strong> WhatsApp notification integration
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🏆 Benefits</h2>
+        
+        <h3>For Restaurant Managers</h3>
+        <ul class="feature-list">
+            <li>Better control over customer flow</li>
+            <li>Reduced wait time complaints</li>
+            <li>Improved table utilization</li>
+            <li>Data-driven decision making</li>
+            <li>Enhanced customer safety with allergen tracking</li>
+        </ul>
+        
+        <h3>For Staff</h3>
+        <ul class="feature-list">
+            <li>Simplified queue management</li>
+            <li>Clear customer information at a glance</li>
+            <li>Easy status updates</li>
+            <li>Quick customer search and retrieval</li>
+            <li>Safety alerts for allergen awareness</li>
+        </ul>
+        
+        <h3>For Customers</h3>
+        <ul class="feature-list">
+            <li>Organized, fair queuing system</li>
+            <li>Clear communication of wait times</li>
+            <li>Recognition of allergen concerns</li>
+            <li>Better overall dining experience</li>
+            <li>Consistent service quality</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🎨 Customization</h2>
+        <p>Built with customization in mind:</p>
+        <ul class="feature-list">
+            <li>Modular architecture for easy extension</li>
+            <li>Well-structured code following Odoo guidelines</li>
+            <li>Extensible models with proper inheritance</li>
+            <li>Custom views that can be inherited</li>
+            <li>API-ready for third-party integrations</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ System Requirements</h2>
+        <ul class="feature-list">
+            <li>Odoo 18.0 (Community or Enterprise)</li>
+            <li>Python 3.10+</li>
+            <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>💼 Why Professional Waiting List Management Matters</h2>
+        <p style="font-size: 1.1em; line-height: 1.8;">
+            In today's competitive restaurant industry, customer experience is everything. A well-managed waiting list 
+            can be the difference between a frustrated customer who never returns and a loyal patron who recommends 
+            your restaurant to friends and family.
+        </p>
+        <p style="font-size: 1.1em; line-height: 1.8;">
+            This module doesn't just track names on a list—it provides a complete ecosystem for managing customer flow, 
+            ensuring safety with allergen tracking, gathering insights about your customers, and optimizing your 
+            restaurant's operations. All while maintaining the highest standards of data security and user access control.
+        </p>
+    </div>
+
+    <div class="cta-section">
+        <h2>🎉 Ready to Transform Your Restaurant Operations?</h2>
+        <p>
+            Install now and experience professional-grade queue management with safety-first allergen tracking!
+        </p>
+        <p style="font-size: 1.1em; margin-top: 30px;">
+            <strong>Community Compatible</strong> • <strong>Professional Grade</strong> • <strong>Safety First</strong>
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>
+            <strong>Developed by Mazen</strong><br>
+            For support and customization inquiries, contact through Odoo App Store
+        </p>
+        <p style="margin-top: 20px; font-size: 0.85em;">
+            This module is licensed under LGPL-3. See LICENSE file for details.
+        </p>
+    </div>
+</body>
+</html>
