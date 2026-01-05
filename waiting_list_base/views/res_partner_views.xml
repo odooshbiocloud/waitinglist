@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Waiting List Customers List View -->
+    <record id="view_waiting_list_customer_tree" model="ir.ui.view">
+        <field name="name">waiting.list.customer.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Waiting List Customers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="email"/>
+                <field name="birthday"/>
+                <field name="waiting_list_count"/>
+                <field name="last_visit_date"/>
+                <field name="no_show_count"/>
+                <field name="category_id" widget="many2many_tags"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Waiting List Customers Kanban View -->
+    <record id="view_waiting_list_customer_kanban" model="ir.ui.view">
+        <field name="name">waiting.list.customer.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="email"/>
+                <field name="birthday"/>
+                <field name="waiting_list_count"/>
+                <field name="last_visit_date"/>
+                <field name="no_show_count"/>
+                <field name="cancelled_count"/>
+                <field name="category_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                                <div class="o_kanban_record_top_right">
+                                    <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div t-if="record.phone.raw_value">
+                                    <i class="fa fa-phone"/> <field name="phone"/>
+                                </div>
+                                <div t-if="record.mobile.raw_value">
+                                    <i class="fa fa-mobile"/> <field name="mobile"/>
+                                </div>
+                                <div t-if="record.email.raw_value">
+                                    <i class="fa fa-envelope"/> <field name="email"/>
+                                </div>
+                                <div t-if="record.birthday.raw_value">
+                                    <i class="fa fa-birthday-cake"/> <field name="birthday"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <span class="badge rounded-pill text-bg-info">
+                                        <i class="fa fa-list"/> <field name="waiting_list_count"/> visits
+                                    </span>
+                                    <span t-if="record.no_show_count.raw_value > 0" class="badge rounded-pill text-bg-danger ms-1">
+                                        <i class="fa fa-times"/> <field name="no_show_count"/> no-shows
+                                    </span>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <span t-if="record.last_visit_date.raw_value" class="text-muted">
+                                        Last: <field name="last_visit_date" widget="date"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View for Waiting List Customers -->
+    <record id="view_waiting_list_customer_search" model="ir.ui.view">
+        <field name="name">waiting.list.customer.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Waiting List Customers">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('phone', 'ilike', self)]"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="email"/>
+                <field name="category_id"/>
+                
+                <filter string="VIP Customers" name="filter_vip" 
+                        domain="[('category_id.name', 'ilike', 'VIP')]"/>
+                <filter string="Recent Visitors (30 days)" name="filter_recent" 
+                        domain="[('last_visit_date', '&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Frequent Visitors" name="filter_frequent" 
+                        domain="[('waiting_list_count', '&gt;=', 5)]"/>
+                <filter string="No Shows" name="filter_no_shows" 
+                        domain="[('no_show_count', '&gt;', 0)]"/>
+                
+                <separator/>
+                <filter string="My Company" name="filter_my_company" 
+                        domain="[('company_id', '=', company_id)]"/>
+                
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Enhanced Customer Form View for Waiting List Customers -->
+    <record id="view_waiting_list_customer_form" model="ir.ui.view">
+        <field name="name">waiting.list.customer.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Add smart button for waiting list count -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="%(waiting_list_base.action_waiting_list)d" 
+                        type="action" 
+                        class="oe_stat_button" 
+                        icon="fa-clock-o"
+                        invisible="not is_waiting_list_customer"
+                        context="{'default_customer_id': id, 'search_default_customer_id': id}">
+                    <field name="waiting_list_count" widget="statinfo" string="Visits"/>
+                </button>
+            </xpath>
+
+            <!-- Add VIP and Statistics group after contact info -->
+            <notebook position="inside">
+                <page name="allergens" string="Allergens" priority="5">
+                    <group>
+                        <div class="alert alert-warning" role="alert" 
+                             invisible="not has_allergens"
+                             style="margin-bottom: 15px;">
+                            <i class="fa fa-exclamation-triangle"/> 
+                            <strong>ALLERGEN WARNING:</strong>
+                            <div style="margin-top: 5px;">
+                                <field name="allergen_warning" readonly="1" nolabel="1"/>
+                            </div>
+                        </div>
+                        
+                        <group string="Allergen Information">
+                            <field name="allergen_ids" widget="many2many_tags" 
+                                   options="{'color_field': 'color', 'no_create': True}"
+                                   placeholder="Select customer allergens..."/>
+                            <field name="allergen_notes" 
+                                   placeholder="Additional dietary restrictions or special instructions (e.g., 'Severe nut allergy - requires separate preparation area')..."/>
+                            <field name="has_allergens" invisible="1"/>
+                        </group>
+                    </group>
+                </page>
+                <page name="waiting_list_info" string="Waiting List Info" invisible="not is_waiting_list_customer">
+                    <group>
+                        <group name="waiting_list_stats" string="Visit Statistics">
+                            <field name="is_waiting_list_customer" invisible="1"/>
+                            <field name="birthday"/>
+                            <field name="waiting_list_count" readonly="1"/>
+                            <field name="last_visit_date" readonly="1"/>
+                            <field name="no_show_count" readonly="1"/>
+                            <field name="cancelled_count" readonly="1"/>
+                        </group>
+                        <group name="waiting_list_vip" string="Customer Classification">
+                            <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <group string="Recent Waiting List Entries">
+                        <field name="waiting_list_ids" nolabel="1" context="{'default_customer_id': id}">
+                            <list>
+                                <field name="name"/>
+                                <field name="create_date"/>
+                                <field name="party_size"/>
+                                <field name="status"/>
+                                <field name="actual_wait_time" widget="float_time"/>
+                                <field name="seated_time"/>
+                            </list>
+                        </field>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <!-- Waiting List Customers Action -->
+    <record id="action_waiting_list_customers" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_waiting_list_customer', '=', True)]</field>
+        <field name="context">{'search_default_filter_vip': 1}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_waiting_list_customer_kanban')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_waiting_list_customer_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_waiting_list_customer_form')})]"/>
+        <field name="search_view_id" ref="view_waiting_list_customer_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first waiting list customer
+            </p>
+            <p>
+                Customers are automatically added here when they join the waiting list.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_waiting_list_customers"
+              name="Customers"
+              parent="menu_waiting_list_main"
+              action="action_waiting_list_customers"
+              sequence="15"/>
+
+</odoo>
