@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="view_waiting_list_config_settings" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.whatsapp.waitinglist</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="waiting_list_enterprise.res_config_settings_view_form_waiting_list_enterprise"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='waiting_list_time_calculation']" position="after">
+                <block title="WhatsApp Notifications" name="whatsapp_waitinglist_settings">
+                    <setting string="Enable WhatsApp for Waiting List" help="Send WhatsApp notifications for waiting list updates">
+                        <field name="waitinglist_whatsapp_enabled"/>
+                        <div class="content-group mt-3" invisible="not waitinglist_whatsapp_enabled">
+                            <div class="row mt16">
+                                <label for="waitinglist_queue_template_id" string="Queue Added Template" class="col-3 o_light_label"/>
+                                <field name="waitinglist_queue_template_id"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="waitinglist_ready_template_id" string="Table Ready Template" class="col-3 o_light_label"/>
+                                <field name="waitinglist_ready_template_id"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="waitinglist_cancel_template_id" string="Cancellation Template" class="col-3 o_light_label"/>
+                                <field name="waitinglist_cancel_template_id"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="waitinglist_noshow_template_id" string="No-Show Template" class="col-3 o_light_label"/>
+                                <field name="waitinglist_noshow_template_id"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="waitinglist_survey_template_id" string="Survey Template" class="col-3 o_light_label"/>
+                                <field name="waitinglist_survey_template_id"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="waitinglist_custom_template_id" string="Custom Template" class="col-3 o_light_label"/>
+                                <field name="waitinglist_custom_template_id"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
