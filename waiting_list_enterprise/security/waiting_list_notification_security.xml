@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- This file ensures the model XML ID exists before cron data is loaded -->
-</odoo>
