@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_waiting_list_spreadsheet_manager,waiting.list.spreadsheet.manager,model_waiting_list_spreadsheet,waiting_list_base.group_waiting_list_manager,1,1,1,1
-access_spreadsheet_dashboard_manager,spreadsheet.dashboard.manager,spreadsheet_dashboard.model_spreadsheet_dashboard,waiting_list_base.group_waiting_list_manager,1,1,1,1
-access_spreadsheet_dashboard_group_manager,spreadsheet.dashboard.group.manager,spreadsheet_dashboard.model_spreadsheet_dashboard_group,waiting_list_base.group_waiting_list_manager,1,1,1,1
